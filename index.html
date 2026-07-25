@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HtmlMaker</title>
+<link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">
+      <img class="brand-mark" id="brandIcon" src="src/img/html5icon.png" alt="HtmlMaker" />
+      <span class="brand-name">HtmlMaker</span>
+    </div>
+    <nav class="page-switch">
+      <button class="tab active" data-page="html">HTML 编辑</button>
+      <button class="tab" data-page="css">CSS 编辑</button>
+      <button class="tab" data-page="js">JS 编辑</button>
+    </nav>
+    <div class="actions">
+      <button class="btn icon-btn" id="btnTheme" title="切换深色/浅色主题">深色</button>
+      <button class="btn" id="btnUndo" title="撤销 (Ctrl+Z)">撤销</button>
+      <button class="btn" id="btnRedo" title="重做 (Ctrl+Y)">重做</button>
+      <button class="btn" id="btnAbout" title="关于 HtmlMaker">关于</button>
+      <button class="btn primary" id="btnExport">导出</button>
+    </div>
+  </header>
+
+  <main id="stage">
+    <!-- HTML 页面 -->
+    <section id="page-html" class="page active">
+      <div class="palette-wrap">
+        <nav class="cat-rail" data-rail-page="html" aria-label="HTML 积木分类"></nav>
+        <aside class="palette" id="paletteHtml"></aside>
+      </div>
+      <section class="ws-col">
+        <div class="ws-toolbar">
+          <label>页面标题</label>
+          <input id="pageTitleInput" type="text" placeholder="未命名页面" />
+        </div>
+        <section class="workspace" id="workspaceHtml"></section>
+      </section>
+      <section class="preview-wrap">
+        <div class="preview-head">
+          <span>HTML 代码</span>
+          <button class="mini" id="btnPreviewToggle" title="切换预览/代码视图">预览</button>
+          <button class="mini" id="btnCopyHtml" title="复制 HTML 代码">复制</button>
+        </div>
+        <pre id="htmlCode" class="code-view"></pre>
+        <iframe id="previewFrame" class="hidden" sandbox="allow-scripts allow-modals allow-forms allow-popups allow-same-origin"></iframe>
+      </section>
+    </section>
+
+    <!-- CSS 页面 -->
+    <section id="page-css" class="page">
+      <div class="palette-wrap">
+        <nav class="cat-rail" data-rail-page="css" aria-label="CSS 积木分类"></nav>
+        <aside class="palette" id="paletteCss"></aside>
+      </div>
+      <section class="workspace" id="workspaceCss"></section>
+      <aside class="css-panel" id="cssPanelCss">
+        <div class="preview-head"><span>生成的 CSS</span></div>
+        <pre id="cssCodeCss" class="code-view"></pre>
+      </aside>
+    </section>
+
+    <!-- JS 页面 -->
+    <section id="page-js" class="page">
+      <div class="palette-wrap">
+        <nav class="cat-rail" data-rail-page="js" aria-label="JS 积木分类"></nav>
+        <aside class="palette" id="paletteJs"></aside>
+      </div>
+      <section class="workspace" id="workspaceJs"></section>
+      <aside class="css-panel" id="jsPanel">
+        <div class="preview-head">
+          <span>生成的 JavaScript</span>
+          <button class="mini" id="btnCopyJs" title="复制 JS 代码">复制</button>
+        </div>
+        <pre id="jsCode" class="code-view"></pre>
+      </aside>
+    </section>
+  </main>
+
+  <!-- 右键上下文菜单 -->
+  <div id="ctxBackdrop" class="ctx-backdrop hidden">
+    <div id="ctxMenu" class="ctx-menu"></div>
+  </div>
+
+  <!-- 导出弹窗 -->
+  <div id="exportOverlay" class="overlay hidden">
+    <div class="props-card">
+      <div class="props-head">
+        <span>导出</span>
+        <button class="mini" id="exportClose">关闭</button>
+      </div>
+      <div class="props-body">
+        <div class="export-tabs">
+          <button class="tab active" data-exp="html">完整 HTML</button>
+          <button class="tab" data-exp="css">仅 CSS</button>
+          <button class="tab" data-exp="js">仅 JS</button>
+          <button class="tab" data-exp="json">项目 JSON</button>
+        </div>
+        <pre id="exportCode" class="export-code"></pre>
+        <div class="export-actions">
+          <button class="btn primary" id="exportCopy">复制</button>
+          <button class="btn" id="exportDownload">下载文件</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自定义提示框容器（替代 alert） -->
+  <div id="toastContainer"></div>
+
+  <!-- 积木悬浮提示框（调色板专用） -->
+  <div id="blockTip" class="block-tip hidden"></div>
+
+  <!-- 关于模态框 -->
+  <div id="aboutOverlay" class="overlay hidden">
+    <div class="about-card">
+      <div class="about-icon" id="aboutIcon"></div>
+      <h2 class="about-title">HtmlMaker</h2>
+      <p class="about-subtitle">可视化 HTML / CSS / JavaScript 积木编辑器</p>
+      <div class="about-meta">
+        <div class="about-row"><span class="about-key">项目</span><span class="about-val">HtmlMaker</span></div>
+        <div class="about-row"><span class="about-key">作者</span><span class="about-val">Clean</span></div>
+        <div class="about-row"><span class="about-key">版本</span><span class="about-val">1.0</span></div>
+      </div>
+      <button class="btn primary about-close" id="aboutClose">关闭</button>
+    </div>
+  </div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/blocks.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/props.js"></script>
+  <script src="js/compile.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/cssPage.js"></script>
+  <script src="js/jsPage.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
