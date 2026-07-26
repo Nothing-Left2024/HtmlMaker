@@ -387,6 +387,64 @@ const Blocks = (() => {
       params:[{name:'result', label:'存入', ph:'t'},{name:'value', label:'值', ph:'x'}],
       code:'let ${result} = typeof ${value};', close:'' },
 
+    // 异步操作（Promise / await / fetch / 定时器）
+    // 创建 Promise：代码块，子语句为执行体（resolve/reject 在内部调用）
+    { id:'jsPromise', label:'创建 Promise', icon:'async', color:'js-async', type:'js', jsType:'statement',
+      params:[{name:'name', label:'存入', ph:'p'}],
+      code:'let ${name} = new Promise((resolve, reject) => {', close:'});' },
+    // resolve(value)
+    { id:'jsResolve', label:'完成 resolve', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'value', label:'值', ph:'x'}],
+      code:'resolve(${value});', close:'' },
+    // reject(error)
+    { id:'jsReject', label:'拒绝 reject', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'error', label:'错误', ph:'err'}],
+      code:'reject(${error});', close:'' },
+    // await 表达式：等待一个 Promise 完成，结果存入变量
+    { id:'jsAwait', label:'等待 await', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'r'},{name:'promise', label:'Promise', ph:'p'}],
+      code:'let ${result} = await ${promise};', close:'' },
+    // Promise.all：等待全部完成
+    { id:'jsPromiseAll', label:'等待全部完成', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'r'},{name:'promises', label:'Promise 列表', ph:'[p1, p2]'}],
+      code:'let ${result} = await Promise.all(${promises});', close:'' },
+    // Promise.race：等待首个完成
+    { id:'jsPromiseRace', label:'等待首个完成', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'r'},{name:'promises', label:'Promise 列表', ph:'[p1, p2]'}],
+      code:'let ${result} = await Promise.race(${promises});', close:'' },
+    // Promise.resolve：立即完成的 Promise
+    { id:'jsPromiseResolve', label:'立即完成', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'p'},{name:'value', label:'值', ph:'x'}],
+      code:'let ${result} = Promise.resolve(${value});', close:'' },
+    // Promise.reject：立即拒绝的 Promise
+    { id:'jsPromiseReject', label:'立即拒绝', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'p'},{name:'error', label:'错误', ph:'err'}],
+      code:'let ${result} = Promise.reject(${error});', close:'' },
+    // fetch 请求：返回 Response 对象
+    { id:'jsFetch', label:'发送请求 fetch', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'res'},{name:'url', label:'地址', ph:'\'/api/data\''}],
+      code:'let ${result} = await fetch(${url});', close:'' },
+    // fetch 并解析 JSON
+    { id:'jsFetchJson', label:'请求并解析 JSON', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'data'},{name:'url', label:'地址', ph:'\'/api/data\''}],
+      code:'let ${result} = await (await fetch(${url})).json();', close:'' },
+    // fetch POST 请求
+    { id:'jsFetchPost', label:'POST 请求', icon:'async', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'result', label:'存入', ph:'res'},{name:'url', label:'地址', ph:'\'/api/save\''},{name:'body', label:'请求体', ph:'JSON.stringify(data)'}],
+      code:'let ${result} = await fetch(${url}, { method: \'POST\', body: ${body} });', close:'' },
+    // 定时重复执行：代码块，子语句为重复执行体
+    { id:'jsSetInterval', label:'定时重复执行', icon:'timer', color:'js-async', type:'js', jsType:'statement',
+      params:[{name:'ms', label:'毫秒', ph:'1000'},{name:'id', label:'存入', ph:'timer'}],
+      code:'let ${id} = setInterval(() => {', close:'}, ${ms});' },
+    // 清除定时器
+    { id:'jsClearInterval', label:'清除定时器', icon:'timer', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'id', label:'定时器', ph:'timer'}],
+      code:'clearInterval(${id});', close:'' },
+    // 清除延时
+    { id:'jsClearTimeout', label:'清除延时', icon:'timer', color:'js-async', type:'js', jsType:'statement', canHaveChildren:false,
+      params:[{name:'id', label:'延时器', ph:'t'}],
+      code:'clearTimeout(${id});', close:'' },
+
     // 交互输入
     { id:'jsPrompt', label:'输入框', icon:'alert', color:'js-output', type:'js', jsType:'statement', canHaveChildren:false,
       params:[{name:'result', label:'存入', ph:'name'},{name:'msg', label:'提示', ph:'请输入名字'}],
@@ -427,6 +485,7 @@ const Blocks = (() => {
     { id:'js-object', label:'对象', icon:'variable', color:'js-object', items: jsDefs.filter(d=>d.color==='js-object') },
     { id:'js-json', label:'JSON', icon:'variable', color:'js-json', items: jsDefs.filter(d=>d.color==='js-json') },
     { id:'js-convert', label:'类型转换', icon:'number', color:'js-convert', items: jsDefs.filter(d=>d.color==='js-convert') },
+    { id:'js-async', label:'异步操作', icon:'async', color:'js-async', items: jsDefs.filter(d=>d.color==='js-async') },
   ];
 
   const COLOR_MAP = {
@@ -439,6 +498,7 @@ const Blocks = (() => {
     'js-math':'var(--c-js-math)', 'js-string':'var(--c-js-string)',
     'js-array':'var(--c-js-array)', 'js-object':'var(--c-js-object)',
     'js-json':'var(--c-js-json)', 'js-convert':'var(--c-js-convert)',
+    'js-async':'var(--c-js-async)',
   };
 
   const all = {};

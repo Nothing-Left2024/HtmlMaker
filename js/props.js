@@ -200,6 +200,7 @@ const Props = (() => {
     body.className = 'ctx-section-body';
     s.appendChild(body);
     const nodes = fill();
+	// Made by Nothing-Left2024 Apache 2.0 Licence
     if(Array.isArray(nodes)) nodes.forEach(n => body.appendChild(n));
     return s;
   }

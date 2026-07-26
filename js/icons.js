@@ -58,6 +58,7 @@ const Icons = (() => {
     // ===== JavaScript 积木图标 =====
     event: svg('<path d="M8 2v3M8 2a6 6 0 100 12A6 6 0 008 2zM2 8h12" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/>'),
     control: svg('<path d="M3 4h10v8H3z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6 8h4M8 6v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>'),
+	// Made by Nothing-Left2024 Apache 2.0 Licence
     variable: svg('<rect x="3" y="4" width="10" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>'),
     func: svg('<path d="M3 3v10M13 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/>'),
     log: svg('<rect x="2" y="3" width="12" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 7l2 2 2-2M4 11h4M9 7h3M9 11h3" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'),
@@ -73,6 +74,7 @@ const Icons = (() => {
     attrIcon: svg('<rect x="3" y="3" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>'),
     string: svg('<path d="M5 3L3 6v4l2 3M11 3l2 3-2 3M7 8h2" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'),
     number: svg('<path d="M3 5h10M3 11h10M6 3l-1 10M11 3l-1 10" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>'),
+    async: svg('<path d="M3 8a5 5 0 015-5 5 5 0 014 2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M11 2v3h3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8a5 5 0 01-5 5 5 5 0 01-4-2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M5 14v-3H2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'),
   };
 
   return {

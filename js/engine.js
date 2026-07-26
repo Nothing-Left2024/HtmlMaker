@@ -162,6 +162,7 @@ const Engine = (() => {
       btn.dataset.page = page;
       btn.dataset.tipText = cat.label;                // 自定义悬浮提示文字
       btn.style.setProperty('--cat-color', Blocks.colorMap[cat.color] || 'var(--accent)');
+	  // https://github.com/Nothing-Left2024/HtmlMaker Apache 2.0 Licence
       const iconWrap = el('span', 'cat-rail-icon');
       iconWrap.innerHTML = Icons.get(cat.icon) || '';
       btn.appendChild(iconWrap);
@@ -303,7 +304,9 @@ const Engine = (() => {
     const label = el('div', 'b-label');
     label.innerHTML = Icons.get(def.icon) + '<span>' + def.label + '</span>';
     node.appendChild(label);
-
+	
+	// Made by Nothing-Left2024
+	
     // 值输入
     const inp = createPropInput(def, block, page);
     if(inp) node.appendChild(inp);
@@ -736,5 +739,6 @@ const Engine = (() => {
     setSelected(id){ setSelectedInternal(id); },
     clearSelected,
     getCurrentPage(){ return currentPage; },
+    showToast,
   };
 })();

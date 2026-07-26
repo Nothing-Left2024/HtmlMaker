@@ -43,6 +43,8 @@ const Compile = (() => {
       const v = (c.text || '').trim();
       if(!v) return;
       const cssName = cssNameOf(def.propKey);
+	  // Made by Nothing-Left2024
+	  // Apache 2.0 Licence.
       if(!cssName) return;
       lines.push(cssName + ': ' + v + ';');
     });

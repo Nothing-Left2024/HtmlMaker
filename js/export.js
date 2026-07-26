@@ -65,6 +65,94 @@ const Exporter = (() => {
       t.addEventListener('click', () => { mode = t.dataset.exp; render(); });
     });
     overlay().addEventListener('click', e => { if(e.target === overlay()) close(); });
+
+    // 导入项目：点击按钮触发文件选择
+    const importBtn = document.getElementById('exportImport');
+    const fileInput = document.getElementById('importFileInput');
+    if(importBtn && fileInput){
+      importBtn.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', handleImportFile);
+    }
+
+    // 导入 HTML：上传 HTML 文件 → 自动转换成积木
+    const importHtmlBtn = document.getElementById('exportImportHtml');
+    const htmlInput = document.getElementById('importHtmlInput');
+    if(importHtmlBtn && htmlInput){
+      importHtmlBtn.addEventListener('click', () => htmlInput.click());
+      htmlInput.addEventListener('change', handleImportHtmlFile);
+    }
+  }
+
+  // 处理导入 HTML 文件：读取 → 解析 → 替换 html/css 页（保留 js 页与原 meta）
+  function handleImportHtmlFile(e){
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const result = ImportHtml.parse(reader.result);
+        if(!result.html.length && !result.css.length && !result.js.length){
+          throw new Error('未在文件中找到可识别的 HTML / CSS / JS 内容');
+        }
+        // 用解析结果替换 html/css/js 页，title 覆盖 meta.name（若有）
+        const cur = Store.getState();
+        const newState = {
+          html: result.html,
+          css: result.css,
+          js: result.js,
+          meta: { name: result.title || cur.meta.name || '未命名页面', created: cur.meta ? cur.meta.created : Date.now() }
+        };
+        Store.replaceAll(newState);
+        if(Engine && Engine.showToast){
+          const parts = [];
+          if(result.html.length) parts.push('HTML ' + result.html.length + ' 个积木');
+          if(result.css.length) parts.push('CSS ' + result.css.length + ' 条规则');
+          if(result.js.length) parts.push('JS ' + result.js.length + ' 个积木');
+          Engine.showToast('HTML 导入成功（' + parts.join('，') + '）', 'success');
+        }
+        close();
+      }catch(err){
+        if(Engine && Engine.showToast) Engine.showToast('HTML 导入失败：' + err.message, 'error');
+      }
+      e.target.value = '';
+    };
+    reader.onerror = () => {
+      if(Engine && Engine.showToast) Engine.showToast('文件读取失败', 'error');
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  // 处理导入文件：读取 → 解析 → 校验 → 替换状态
+  function handleImportFile(e){
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const data = JSON.parse(reader.result);
+        // 基础校验：必须包含 html / css / meta 字段
+        if(!data || typeof data !== 'object') throw new Error('文件内容不是有效的 JSON 对象');
+        if(!Array.isArray(data.html)) throw new Error('缺少 html 字段或格式不正确');
+        if(!Array.isArray(data.css)) throw new Error('缺少 css 字段或格式不正确');
+        if(!data.meta || typeof data.meta !== 'object') throw new Error('缺少 meta 字段');
+        // js 字段可选，但若存在必须是数组
+        if(data.js != null && !Array.isArray(data.js)) throw new Error('js 字段格式不正确');
+        if(!data.js) data.js = [];
+        Store.replaceAll(data);
+        if(Engine && Engine.showToast) Engine.showToast('项目导入成功', 'success');
+        close();
+      }catch(err){
+        if(Engine && Engine.showToast) Engine.showToast('导入失败：' + err.message, 'error');
+      }
+      // 重置 input，便于重复导入同一文件
+      e.target.value = '';
+    };
+    reader.onerror = () => {
+      if(Engine && Engine.showToast) Engine.showToast('文件读取失败', 'error');
+      e.target.value = '';
+    };
+    reader.readAsText(file);
   }
 
   return { open, close, init };
