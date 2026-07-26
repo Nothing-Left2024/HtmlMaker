@@ -180,4 +180,4 @@ The interface follows an "emotional minimalism" style, referencing Apple design 
 
 ## License
 
-For learning and personal use only.
+Apache Licence 2.0.
